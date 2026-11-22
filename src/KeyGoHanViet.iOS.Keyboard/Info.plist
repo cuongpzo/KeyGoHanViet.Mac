@@ -6,6 +6,12 @@
     <string>KeyGo Hán Việt</string>
     <key>CFBundleDevelopmentRegion</key>
     <string>vi</string>
+    <!-- Phải khớp app chứa: thiếu số 2 thì trên iPad bàn phím chạy kiểu iPhone phóng to. -->
+    <key>UIDeviceFamily</key>
+    <array>
+        <integer>1</integer>
+        <integer>2</integer>
+    </array>
     <key>NSExtension</key>
     <dict>
         <key>NSExtensionPointIdentifier</key>
