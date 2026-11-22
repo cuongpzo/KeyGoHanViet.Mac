@@ -16,12 +16,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Chọn Xcode bản ổn định mới nhất
+      # Dùng Xcode mặc định của máy ảo (bản đã cài đủ SDK). Ghi lại phiên bản
+      # và danh sách Xcode có sẵn lên trang tóm tắt để dễ dò khi workload đổi.
+      - name: Xem Xcode đang dùng
         run: |
-          ls -d /Applications/Xcode*.app || true
-          XCODE=$(ls -d /Applications/Xcode_*.app | grep -viE 'beta|rc' | sort -V | tail -1)
-          if [ -n "$XCODE" ]; then sudo xcode-select -s "$XCODE"; fi
-          xcodebuild -version
+          echo "::notice::$(xcodebuild -version | tr '\n' ' ') | $(xcode-select -p) | có: $(ls -d /Applications/Xcode*.app | xargs -n1 basename | tr '\n' ' ')"
 
       - uses: actions/setup-dotnet@v4
         with:
