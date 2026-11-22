@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    App chứa cho iPhone / iPad. Bản thân nó chỉ hiện hướng dẫn bật bàn phím và
+    một ô gõ thử; phần gõ chữ nằm trong KeyGoHanViet.iOS.Keyboard (extension),
+    được nhúng vào PlugIns/ của gói .app này.
+
+    Build trên GitHub Actions (.github/workflows/build-ios.yml) ra .ipa chưa ký;
+    ký và cài bằng Sideloadly - xem HUONG_DAN_IPHONE.md.
+  -->
+  <PropertyGroup>
+    <TargetFramework>net10.0-ios</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>KeyGoHanViet.iOS</RootNamespace>
+    <AssemblyName>KeyGoHanViet</AssemblyName>
+    <SupportedOSPlatformVersion>16.0</SupportedOSPlatformVersion>
+
+    <ApplicationId>com.cuongpzo.keygohanviet</ApplicationId>
+    <ApplicationDisplayVersion>$(Version)</ApplicationDisplayVersion>
+    <ApplicationVersion>$(Version)</ApplicationVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../KeyGoHanViet.iOS.Keyboard/KeyGoHanViet.iOS.Keyboard.csproj">
+      <IsAppExtension>true</IsAppExtension>
+      <IsWatchApp>false</IsWatchApp>
+    </ProjectReference>
+  </ItemGroup>
+
+</Project>

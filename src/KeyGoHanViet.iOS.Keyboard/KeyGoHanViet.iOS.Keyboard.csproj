@@ -1,0 +1,44 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Bàn phím tuỳ chỉnh (Custom Keyboard Extension) của iOS. Đây mới là phần gõ
+    chữ thật sự; app KeyGoHanViet.iOS chỉ là vỏ chứa để cài nó lên iPhone.
+
+    Dùng lại nguyên lõi KeyGoHanViet.Shared (TELEX, từ điển, xếp hạng ứng viên)
+    nên gõ ra chữ giống hệt bản Windows / macOS.
+  -->
+  <PropertyGroup>
+    <TargetFramework>net10.0-ios</TargetFramework>
+    <OutputType>Library</OutputType>
+    <IsAppExtension>true</IsAppExtension>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>KeyGoHanViet.iOS.Keyboard</RootNamespace>
+    <AssemblyName>KeyGoHanVietKeyboard</AssemblyName>
+    <SupportedOSPlatformVersion>16.0</SupportedOSPlatformVersion>
+
+    <!-- Mã gói của extension bắt buộc phải bắt đầu bằng mã gói của app chứa. -->
+    <ApplicationId>com.cuongpzo.keygohanviet.keyboard</ApplicationId>
+    <ApplicationDisplayVersion>$(Version)</ApplicationDisplayVersion>
+    <ApplicationVersion>$(Version)</ApplicationVersion>
+
+    <!--
+      Lõi dùng System.Text.Json kiểu phản chiếu (settings, usage, macros). iOS
+      luôn cắt tỉa mã nên mặc định tắt phản chiếu - phải bật lại.
+    -->
+    <JsonSerializerIsReflectionEnabledByDefault>true</JsonSerializerIsReflectionEnabledByDefault>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../KeyGoHanViet.Shared/KeyGoHanViet.Shared.csproj" />
+  </ItemGroup>
+
+  <!-- Từ điển đi kèm, nằm ở Data/ bên trong gói .appex. -->
+  <ItemGroup>
+    <BundleResource Include="../../hannomPS.dict_v2.yaml" LogicalName="Data/hannomPS.dict_v2.yaml" />
+    <BundleResource Include="../../ChinesePhienAmWords.txt" LogicalName="Data/ChinesePhienAmWords.txt" />
+    <BundleResource Include="../KeyGoHanViet/Data/user.dict.yaml" LogicalName="Data/user.dict.yaml" />
+    <BundleResource Include="../KeyGoHanViet/Data/macros.default.json" LogicalName="Data/macros.default.json" />
+  </ItemGroup>
+
+</Project>
