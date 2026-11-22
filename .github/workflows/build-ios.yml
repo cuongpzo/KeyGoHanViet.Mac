@@ -1,6 +1,8 @@
 # Build KeyGo Hán Việt cho iPhone / iPad thành tệp .ipa CHƯA KÝ.
-# Tải artifact "KeyGoHanViet-iOS-unsigned-ipa" về Windows rồi dùng Sideloadly
-# ký bằng Apple ID cá nhân và cài lên máy - xem HUONG_DAN_IPHONE.md.
+# Mỗi lần push lên main, tệp .ipa được đăng lên GitHub Release "ios-latest" với
+# link tải cố định (không cần đăng nhập GitHub):
+#   https://github.com/cuongpzo/KeyGoHanViet.Mac/releases/download/ios-latest/KeyGoHanViet-iOS-unsigned.ipa
+# Ký bằng Apple ID cá nhân và cài lên máy bằng Sideloadly - xem HUONG_DAN_IPHONE.md.
 name: Build iOS
 
 on:
@@ -8,6 +10,15 @@ on:
     branches: [main]
   pull_request:
   workflow_dispatch:
+
+# Cần quyền ghi để tạo / thay GitHub Release.
+permissions:
+  contents: write
+
+# Hai lần push sát nhau thì lần sau thay lần trước, tránh đua nhau ghi Release.
+concurrency:
+  group: build-ios-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
@@ -58,6 +69,7 @@ jobs:
           IPA="KeyGoHanViet-${VERSION}-iOS-unsigned.ipa"
           zip -qry "$IPA" Payload
           echo "ipa=$IPA" >> "$GITHUB_OUTPUT"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           ls -lh "$IPA"
 
       - uses: actions/upload-artifact@v4
@@ -65,3 +77,24 @@ jobs:
           name: KeyGoHanViet-iOS-unsigned-ipa
           path: ${{ steps.pack.outputs.ipa }}
           if-no-files-found: error
+
+      # Release "ios-latest": xoá bản cũ, tạo lại trỏ vào commit này. Tên tệp cố
+      # định nên link tải luôn trỏ tới bản mới nhất. Chỉ chạy khi push lên main.
+      - name: Đăng lên GitHub Release (ios-latest)
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.pack.outputs.version }}
+          IPA: ${{ steps.pack.outputs.ipa }}
+        run: |
+          cp "$IPA" KeyGoHanViet-iOS-unsigned.ipa
+          cat > notes.md <<EOF
+          Bàn phím **KeyGo Hán Việt $VERSION** cho iPhone / iPad - tệp .ipa **chưa ký**
+          (commit ${GITHUB_SHA::7}).
+
+          Không cài thẳng từ iPhone được: phải ký bằng Apple ID qua **Sideloadly**
+          trên máy tính. Hướng dẫn: [HUONG_DAN_IPHONE.md](https://github.com/${GITHUB_REPOSITORY}/blob/main/HUONG_DAN_IPHONE.md)
+          EOF
+          gh release delete ios-latest --yes --cleanup-tag || true
+          gh release create ios-latest             KeyGoHanViet-iOS-unsigned.ipa "$IPA"             --target "$GITHUB_SHA"             --title "KeyGo Hán Việt $VERSION cho iPhone (chưa ký)"             --notes-file notes.md             --latest
+          echo "::notice::Link tải: https://github.com/${GITHUB_REPOSITORY}/releases/download/ios-latest/KeyGoHanViet-iOS-unsigned.ipa"

@@ -12,13 +12,18 @@ nhớ lượt chọn) dùng chung với bản máy tính, nên `hans` → 漢, `
 
 ## Bước 1 - Tải tệp .ipa từ GitHub
 
-1. Mở <https://github.com/cuongpzo/KeyGoHanViet.Mac/actions/workflows/build-ios.yml>
-2. Bấm vào lần chạy mới nhất có dấu ✓ xanh.
-3. Kéo xuống mục **Artifacts** → tải **KeyGoHanViet-iOS-unsigned-ipa** (phải đăng nhập GitHub).
-4. Giải nén tệp zip vừa tải → được `KeyGoHanViet-<phiên bản>-iOS-unsigned.ipa`.
+Link tải trực tiếp, luôn là bản mới nhất, không cần đăng nhập GitHub:
 
-Muốn build lại bằng tay: trang trên → **Run workflow** → **Run workflow**.
-Mỗi lần `git push` lên `main` cũng tự build.
+**<https://github.com/cuongpzo/KeyGoHanViet.Mac/releases/download/ios-latest/KeyGoHanViet-iOS-unsigned.ipa>**
+
+Trang Release (xem phiên bản, ghi chú): <https://github.com/cuongpzo/KeyGoHanViet.Mac/releases/tag/ios-latest>
+
+> Tải bằng iPhone thì tệp chỉ nằm trong app **Tệp** - iOS **không cài thẳng** được tệp
+> .ipa chưa ký. Phải tải về (hoặc chuyển sang) máy tính để ký bằng Sideloadly ở bước 3.
+
+Mỗi lần `git push` lên `main`, GitHub tự build lại và thay tệp ở link trên. Muốn build
+bằng tay: <https://github.com/cuongpzo/KeyGoHanViet.Mac/actions/workflows/build-ios.yml>
+→ **Run workflow**.
 
 ## Bước 2 - Chuẩn bị trên Windows
 
@@ -68,9 +73,14 @@ Mỗi lần `git push` lên `main` cũng tự build.
 
 ## Lưu ý quan trọng
 
-- **Apple ID miễn phí: app hết hạn sau 7 ngày.** Hết hạn thì bàn phím biến mất khỏi danh
-  sách. Cắm máy, mở Sideloadly, cài lại tệp `.ipa` cũ là xong (dữ liệu lượt chọn vẫn giữ).
-  Tài khoản Apple Developer ($99/năm) thì hạn 1 năm.
+- **Apple ID miễn phí: app hết hạn sau 7 ngày.** Hết hạn thì app **không bị xoá**, biểu
+  tượng và dữ liệu (lịch sử chọn chữ) vẫn còn, nhưng app không mở được và bàn phím ngừng
+  hoạt động (có thể vẫn còn tên trong Cài đặt, bấm 🌐 thì bị bỏ qua).
+  Cắm máy, mở Sideloadly, cài lại tệp `.ipa` bằng **đúng Apple ID cũ** là dùng tiếp, giữ
+  nguyên dữ liệu. Đổi Apple ID khác thì thành app mới, mất lịch sử chọn chữ.
+  Đỡ phải cài lại: bật tự làm mới qua Wi-Fi của Sideloadly (Advanced Options; máy tính
+  bật Sideloadly, cùng Wi-Fi, đã bật đồng bộ Wi-Fi trong iTunes), hoặc dùng tài khoản
+  Apple Developer ($99/năm) - hạn 1 năm.
 - Apple ID miễn phí cài tối đa 3 app tự ký cùng lúc.
 - Một số chữ Hán hiếm (khối mở rộng B trở đi, ví dụ 𠊛) có thể hiện ô vuông vì
   phông của iOS không có - chèn vào vẫn đúng mã, chỉ là không thấy hình.
