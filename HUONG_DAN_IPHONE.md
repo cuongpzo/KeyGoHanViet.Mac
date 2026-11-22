@@ -1,6 +1,10 @@
-# Cài KeyGo Hán Việt lên iPhone (iPhone 17 Pro Max, iOS 26)
+# Cài KeyGo Hán Việt lên iPhone / iPad (iOS, iPadOS 16 trở lên)
 
-Trên iPhone, KeyGo Hán Việt là một **bàn phím tuỳ chỉnh**: bạn chuyển sang nó
+**iPhone và iPad dùng chung một tệp .ipa**, cách cài giống hệt nhau (trên iPad
+bàn phím tự giãn theo bề ngang màn hình). Bản macOS: xem
+[.github/README.md](.github/README.md).
+
+Trên iPhone / iPad, KeyGo Hán Việt là một **bàn phím tuỳ chỉnh**: bạn chuyển sang nó
 bằng phím 🌐 như chuyển sang bàn phím tiếng Anh / emoji. iOS không cho chương
 trình nào "móc" vào bàn phím hệ thống như trên Windows / macOS, nên đây là cách
 duy nhất.
@@ -14,15 +18,15 @@ nhớ lượt chọn) dùng chung với bản máy tính, nên `hans` → 漢, `
 
 Link tải trực tiếp, luôn là bản mới nhất, không cần đăng nhập GitHub:
 
-**<https://github.com/cuongpzo/KeyGoHanViet.Mac/releases/download/ios-latest/KeyGoHanViet-iOS-unsigned.ipa>**
+**<https://github.com/cuongpzo/KeyGoHanViet.Mac/releases/download/latest/KeyGoHanViet-iOS-unsigned.ipa>**
 
-Trang Release (xem phiên bản, ghi chú): <https://github.com/cuongpzo/KeyGoHanViet.Mac/releases/tag/ios-latest>
+Trang Release (xem phiên bản, ghi chú): <https://github.com/cuongpzo/KeyGoHanViet.Mac/releases/tag/latest>
 
 > Tải bằng iPhone thì tệp chỉ nằm trong app **Tệp** - iOS **không cài thẳng** được tệp
 > .ipa chưa ký. Phải tải về (hoặc chuyển sang) máy tính để ký bằng Sideloadly ở bước 3.
 
 Mỗi lần `git push` lên `main`, GitHub tự build lại và thay tệp ở link trên. Muốn build
-bằng tay: <https://github.com/cuongpzo/KeyGoHanViet.Mac/actions/workflows/build-ios.yml>
+bằng tay: <https://github.com/cuongpzo/KeyGoHanViet.Mac/actions/workflows/build.yml>
 → **Run workflow**.
 
 ## Bước 2 - Chuẩn bị trên Windows

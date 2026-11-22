@@ -3,28 +3,38 @@
 Bộ gõ Hán Việt chạy trên thanh trình đơn macOS (Avalonia, .NET 10), kèm bản
 bàn phím tuỳ chỉnh cho iPhone / iPad.
 
-**iPhone / iPad:** xem [HUONG_DAN_IPHONE.md](../HUONG_DAN_IPHONE.md) — tải `.ipa` từ
-workflow **Build iOS**, ký và cài bằng Sideloadly.
+## Tải về (bản mới nhất, không cần đăng nhập)
 
-## macOS
+Trang Release: <https://github.com/cuongpzo/KeyGoHanViet.Mac/releases/tag/latest>
 
-## Tải bản build sẵn
+| Thiết bị | Link tải |
+|---|---|
+| iPhone / iPad (cùng một tệp) | [KeyGoHanViet-iOS-unsigned.ipa](https://github.com/cuongpzo/KeyGoHanViet.Mac/releases/download/latest/KeyGoHanViet-iOS-unsigned.ipa) |
+| Mac Apple Silicon (M1 trở lên) | [KeyGoHanViet-macOS-arm64.zip](https://github.com/cuongpzo/KeyGoHanViet.Mac/releases/download/latest/KeyGoHanViet-macOS-arm64.zip) |
+| Mac Intel | [KeyGoHanViet-macOS-x64.zip](https://github.com/cuongpzo/KeyGoHanViet.Mac/releases/download/latest/KeyGoHanViet-macOS-x64.zip) |
 
-1. Mở tab **Actions** → chọn lần chạy **Build macOS** mới nhất (dấu ✓ xanh).
-2. Kéo xuống mục **Artifacts**, tải:
-   - `KeyGoHanViet-macOS-arm64` cho máy Apple Silicon (M1 trở lên)
-   - `KeyGoHanViet-macOS-x64` cho máy Intel
-3. Giải nén (GitHub gói thêm một lớp zip) → ra `KeyGo Hán Việt.app`.
-4. Gỡ cờ cách ly rồi chép vào Applications:
+Mỗi lần push lên `main`, workflow **Build** (`.github/workflows/build.yml`) build lại cả ba
+và thay tệp ở các link trên.
+
+**iPhone / iPad:** tệp `.ipa` chưa ký - ký và cài bằng Sideloadly, xem
+[HUONG_DAN_IPHONE.md](../HUONG_DAN_IPHONE.md).
+
+## Cài trên macOS
+
+1. Tải tệp zip đúng loại máy ở bảng trên (Apple ▸ Giới thiệu về máy Mac: "Chip Apple M…" là
+   Apple Silicon, "Bộ xử lý Intel…" là Intel).
+2. Giải nén → ra `KeyGo Hán Việt.app`.
+3. Mở Terminal tại thư mục đó, gỡ cờ cách ly rồi chép vào Applications:
 
    ```bash
    xattr -cr "KeyGo Hán Việt.app"
    cp -R "KeyGo Hán Việt.app" /Applications/
    ```
 
-5. Lần chạy đầu: **Cài đặt Hệ thống ▸ Quyền riêng tư & Bảo mật ▸ Trợ năng** → bật KeyGo Hán Việt.
+4. Lần chạy đầu: **Cài đặt Hệ thống ▸ Quyền riêng tư & Bảo mật ▸ Trợ năng** → bật KeyGo Hán Việt.
 
-Gói chỉ ký tạm (ad-hoc), không qua notarize của Apple, nên bắt buộc làm bước 4.
+Gói chỉ ký tạm (ad-hoc), không qua notarize của Apple, nên bắt buộc làm bước 3.
+Bản macOS không hết hạn như bản iPhone.
 
 ## Build trên máy Mac
 

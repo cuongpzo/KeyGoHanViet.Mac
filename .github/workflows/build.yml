@@ -1,0 +1,162 @@
+# Build KeyGo Hán Việt cho mọi nền tảng Apple trên máy ảo macOS của GitHub, rồi
+# đăng tất cả lên MỘT GitHub Release tên "latest" (link tải cố định, không cần
+# đăng nhập GitHub):
+#
+#   KeyGoHanViet-iOS-unsigned.ipa   iPhone + iPad (cùng một tệp), chưa ký -> Sideloadly
+#   KeyGoHanViet-macOS-arm64.zip    Mac Apple Silicon (M1 trở lên), ký tạm ad-hoc
+#   KeyGoHanViet-macOS-x64.zip      Mac Intel, ký tạm ad-hoc
+#
+#   https://github.com/cuongpzo/KeyGoHanViet.Mac/releases/download/latest/<tên tệp>
+#
+# Push lên main thì build + đăng Release; pull request chỉ build để kiểm tra.
+name: Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+# Cần quyền ghi để tạo / thay GitHub Release.
+permissions:
+  contents: write
+
+# Hai lần push sát nhau thì lần sau thay lần trước, tránh đua nhau ghi Release.
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ------------------------------------------------------------------ macOS
+  macos:
+    name: macOS (${{ matrix.rid }})
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        rid: [osx-arm64, osx-x64]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Đóng gói .app (${{ matrix.rid }})
+        run: bash ./publish-mac.sh -r ${{ matrix.rid }}
+
+      - name: Nén gói .app thành zip
+        id: pack
+        run: |
+          ARCH=${{ matrix.rid }}; ARCH=${ARCH#osx-}
+          ZIP="KeyGoHanViet-macOS-${ARCH}.zip"
+          # ditto giữ nguyên quyền thực thi, symlink và chữ ký của gói .app.
+          ditto -c -k --keepParent "dist/KeyGo Hán Việt.app" "$ZIP"
+          echo "zip=$ZIP" >> "$GITHUB_OUTPUT"
+          echo "arch=$ARCH" >> "$GITHUB_OUTPUT"
+          ls -lh "$ZIP"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: KeyGoHanViet-macOS-${{ steps.pack.outputs.arch }}
+          path: ${{ steps.pack.outputs.zip }}
+          if-no-files-found: error
+
+  # -------------------------------------------------------------- iPhone + iPad
+  ios:
+    name: iOS / iPadOS (.ipa chưa ký)
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # Dùng Xcode mặc định của máy ảo (bản đã cài đủ SDK). KHÔNG tự xcode-select:
+      # Xcode_26.6.0.app trên runner thiếu MacOSX.sdk làm actool hỏng.
+      - name: Xem Xcode đang dùng
+        run: |
+          echo "::notice::$(xcodebuild -version | tr '\n' ' ') | $(xcode-select -p)"
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Cài workload iOS
+        run: dotnet workload install ios
+
+      - name: Build .app (arm64, không ký; chạy cả iPhone lẫn iPad)
+        run: |
+          set -o pipefail
+          dotnet build src/KeyGoHanViet.iOS/KeyGoHanViet.iOS.csproj \
+            -c Release -r ios-arm64 \
+            -p:EnableCodeSigning=false \
+            -p:ValidateXcodeVersion=false \
+            -nologo -clp:ErrorsOnly 2>&1 | tee build.log || {
+              # Đẩy các dòng lỗi lên thành annotation để xem được ngay ở trang tóm tắt.
+              grep -iE 'error|failed' build.log | sort -u | head -8 | while IFS= read -r line; do
+                echo "::error::${line:0:900}"
+              done
+              exit 1
+            }
+
+      - name: Đóng gói thành .ipa
+        run: |
+          APP=$(find src/KeyGoHanViet.iOS/bin/Release -type d -name '*.app' -path '*ios-arm64*' | head -1)
+          echo "App: $APP"
+          test -n "$APP"
+          ls "$APP/PlugIns"
+          test -f "$APP/PlugIns/"*.appex/Data/hannomPS.dict_v2.yaml
+          rm -rf Payload && mkdir Payload
+          cp -R "$APP" Payload/
+          zip -qry KeyGoHanViet-iOS-unsigned.ipa Payload
+          ls -lh KeyGoHanViet-iOS-unsigned.ipa
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: KeyGoHanViet-iOS-unsigned-ipa
+          path: KeyGoHanViet-iOS-unsigned.ipa
+          if-no-files-found: error
+
+  # ---------------------------------------------------------------- Release
+  release:
+    name: Đăng GitHub Release "latest"
+    needs: [macos, ios]
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          path: out
+          merge-multiple: true
+
+      - name: Tạo lại Release "latest"
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION=$(sed -n 's:.*<Version>\(.*\)</Version>.*:\1:p' Directory.Build.props | head -1)
+          ls -lh out
+          BASE="https://github.com/${GITHUB_REPOSITORY}/releases/download/latest"
+          GUIDE="https://github.com/${GITHUB_REPOSITORY}/blob/main"
+          cat > notes.md <<EOF
+          **KeyGo Hán Việt $VERSION** cho iPhone, iPad và macOS (commit ${GITHUB_SHA::7}).
+
+          | Thiết bị | Tệp | Cách cài |
+          |---|---|---|
+          | iPhone / iPad | [KeyGoHanViet-iOS-unsigned.ipa]($BASE/KeyGoHanViet-iOS-unsigned.ipa) | Chưa ký - ký bằng Apple ID qua **Sideloadly** trên máy tính. [Hướng dẫn]($GUIDE/HUONG_DAN_IPHONE.md) |
+          | Mac Apple Silicon (M1 trở lên) | [KeyGoHanViet-macOS-arm64.zip]($BASE/KeyGoHanViet-macOS-arm64.zip) | Giải nén, chạy \`xattr -cr "KeyGo Hán Việt.app"\`, kéo vào Applications. [Hướng dẫn]($GUIDE/.github/README.md) |
+          | Mac Intel | [KeyGoHanViet-macOS-x64.zip]($BASE/KeyGoHanViet-macOS-x64.zip) | Như trên. |
+
+          iPhone và iPad dùng chung một tệp .ipa. iOS không cài thẳng được tệp .ipa chưa ký.
+          EOF
+          # Dọn Release cũ: "latest" của lần trước và "ios-latest" (tên cũ, chỉ có iOS).
+          gh release delete latest --yes --cleanup-tag || true
+          gh release delete ios-latest --yes --cleanup-tag || true
+          gh release create latest out/* \
+            --target "$GITHUB_SHA" \
+            --title "KeyGo Hán Việt $VERSION - iPhone, iPad, macOS" \
+            --notes-file notes.md \
+            --latest
+          echo "::notice::Release: https://github.com/${GITHUB_REPOSITORY}/releases/tag/latest"
