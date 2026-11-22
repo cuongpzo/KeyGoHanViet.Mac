@@ -1,0 +1,82 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>KeyGoHanViet</AssemblyName>
+    <RootNamespace>KeyGoHanViet.Mac</RootNamespace>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <InvariantGlobalization>false</InvariantGlobalization>
+    <BuiltInComInteropSupport>false</BuiltInComInteropSupport>
+    <NoWin32Manifest>true</NoWin32Manifest>
+    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+
+    <!--
+      Chỉ có hai RID đáng dựng: osx-arm64 cho máy Apple Silicon (M1 trở lên) và
+      osx-x64 cho máy Intel. Script publish-mac.sh gộp hai bản thành một
+      universal binary bằng lipo.
+    -->
+    <RuntimeIdentifiers>osx-arm64;osx-x64</RuntimeIdentifiers>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../KeyGoHanViet.Shared/KeyGoHanViet.Shared.csproj" />
+  </ItemGroup>
+
+  <!--
+    Cố ý KHÔNG dùng gói gộp Avalonia.Desktop: gói đó kéo theo cả backend Win32
+    lẫn X11 của Linux, mà X11 lại kéo theo Tmds.DBus.Protocol đang có lỗ hổng
+    bảo mật đã công bố. App này chỉ chạy trên macOS nên chỉ cần Avalonia.Native.
+  -->
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="11.3.0" />
+    <PackageReference Include="Avalonia.Native" Version="11.3.0" />
+    <PackageReference Include="Avalonia.Skia" Version="11.3.0" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.0" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.0" />
+
+    <!-- Bảng sửa trực tiếp của tab Gõ tắt và bảng tra thử của tab Từ điển. -->
+    <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.3.0" />
+  </ItemGroup>
+
+  <!--
+    Dữ liệu đi kèm: cùng bộ tệp với bản Windows. publish-mac.sh chuyển thư mục
+    Data này vào Contents/Resources/Data trong gói .app.
+  -->
+  <!--
+    Đường dẫn trong Link cố ý dùng dấu gạch XUÔI. MSBuild trên macOS/Linux không
+    coi "\" là dấu ngăn thư mục, nên viết "Data\x.yaml" ở đó sẽ đẻ ra một tệp
+    tên đúng là "Data\x.yaml" nằm chỏng chơ ở thư mục gốc thay vì thư mục Data.
+    Gạch xuôi thì cả ba hệ đều hiểu đúng.
+  -->
+  <ItemGroup>
+    <None Include="../../hannomPS.dict_v2.yaml" Link="Data/hannomPS.dict_v2.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="../../hannomPS.schema.yaml" Link="Data/hannomPS.schema.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="../../ChinesePhienAmWords.txt" Link="Data/ChinesePhienAmWords.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="../KeyGoHanViet/Data/user.dict.yaml" Link="Data/user.dict.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="../KeyGoHanViet/Data/macros.default.json" Link="Data/macros.default.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <!--
+    Hai biểu tượng K / Q dùng chung tệp .ico với bản Windows, nhúng thẳng vào
+    assembly. Avalonia không giải mã được .ico nên MacTrayIcons tự bóc khối PNG
+    256x256 nằm bên trong - xem ghi chú trong tệp đó.
+  -->
+  <ItemGroup>
+    <EmbeddedResource Include="../KeyGoHanViet/kickstarter.ico" LogicalName="KeyGoHanViet.Icons.On.ico" />
+    <EmbeddedResource Include="../KeyGoHanViet/letter-q.ico" LogicalName="KeyGoHanViet.Icons.Off.ico" />
+  </ItemGroup>
+
+</Project>

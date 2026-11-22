@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Lõi dùng chung cho cả bản Windows lẫn bản macOS.
+
+    Ràng buộc bắt buộc của project này: KHÔNG tham chiếu WinForms, WPF,
+    System.Drawing hay bất kỳ API riêng của một hệ điều hành nào. Mọi thứ chạm
+    tới bàn phím, màn hình hay khay hệ thống đều phải đi qua các giao diện trong
+    thư mục Platform\, và mỗi hệ điều hành tự hiện thực lấy.
+  -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>KeyGoHanViet.Shared</AssemblyName>
+    <RootNamespace>KeyGoHanViet</RootNamespace>
+    <InvariantGlobalization>false</InvariantGlobalization>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+  </PropertyGroup>
+
+</Project>

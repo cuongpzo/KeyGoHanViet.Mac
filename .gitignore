@@ -1,0 +1,29 @@
+# Kho GitHub KeyGoHanViet.Mac chỉ chứa bản macOS và đúng những gì nó cần để build.
+# Danh sách trắng: bỏ qua tất cả, rồi mở lại từng đường dẫn cần thiết.
+/*
+!/.gitignore
+!/.gitattributes
+!/.github/
+!/Directory.Build.props
+!/publish-mac.sh
+!/hannomPS.dict_v2.yaml
+!/hannomPS.schema.yaml
+!/ChinesePhienAmWords.txt
+
+!/src/
+/src/*
+!/src/KeyGoHanViet.Mac/
+!/src/KeyGoHanViet.Shared/
+
+# Từ bản Windows chỉ lấy icon K/Q và dữ liệu mặc định mà dự án Mac tham chiếu.
+!/src/KeyGoHanViet/
+/src/KeyGoHanViet/*
+!/src/KeyGoHanViet/kickstarter.ico
+!/src/KeyGoHanViet/letter-q.ico
+!/src/KeyGoHanViet/Data/
+
+# Rác build và tệp do Google Drive / Windows sinh ra.
+bin/
+obj/
+desktop.ini
+.DS_Store

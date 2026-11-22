@@ -1,0 +1,10 @@
+<Project>
+  <!--
+    Số phiên bản chung cho mọi project (Windows, macOS, lõi dùng chung, bộ kiểm
+    thử). Tăng số này mỗi đợt thay đổi; chương trình đọc lại qua AppInfo.Version
+    để hiện trên tiêu đề cửa sổ Tuỳ chọn và dòng chú thích biểu tượng khay.
+  -->
+  <PropertyGroup>
+    <Version>1.1.2</Version>
+  </PropertyGroup>
+</Project>

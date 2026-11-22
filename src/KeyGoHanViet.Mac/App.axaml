@@ -1,0 +1,16 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="KeyGoHanViet.Mac.App"
+             RequestedThemeVariant="Default">
+
+  <!--
+    Toàn bộ cửa sổ đều dựng bằng mã C#, tệp này chỉ làm một việc: nạp bộ giao
+    diện. Giữ nguyên RequestedThemeVariant="Default" để chương trình đi theo
+    chế độ Sáng/Tối mà người dùng đã chọn trong Cài đặt Hệ thống của macOS.
+  -->
+  <Application.Styles>
+    <FluentTheme />
+    <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" />
+  </Application.Styles>
+
+</Application>

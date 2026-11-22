@@ -1,0 +1,53 @@
+# Rime dictionary (bổ sung của người dùng)
+# encoding: utf-8
+#
+# Các mục ở đây được nạp cùng từ điển chính và luôn được ưu tiên hơn mục
+# cùng chữ/cùng mã trong từ điển gốc.
+#
+# Định dạng mỗi dòng, phân tách bằng ký tự TAB. Có hai kiểu, viết lẫn lộn
+# trong cùng một tệp cũng được — chương trình tự nhận ra từng dòng:
+#
+#   <chữ Hán Nôm> <TAB> <mã telex> <TAB> <trọng số> <TAB> <ghi chú>
+#   <chữ Hán Nôm> <TAB> <mã telex> <TAB> <âm đọc Quốc ngữ> <TAB> <trọng số> <TAB> <ghi chú>
+#
+# Mã telex gồm các âm tiết cách nhau bằng dấu cách, theo quy ước của hannomPS:
+#   s=sắc  f=huyền  r=hỏi  x=ngã  j=nặng  z=ngang
+#   aa=â  aw=ă  ee=ê  oo=ô  ow=ơ  uw=ư  dd=đ
+#
+# Cột âm đọc Quốc ngữ là tuỳ chọn: có nó thì mục từ tra được bằng chính chuỗi
+# có dấu ("hán việt từ điển trích dẫn"), và đó cũng là chuỗi hiện trong khung
+# gợi ý. Không có thì chương trình vẫn tự dựng âm đọc từ mã telex, chỉ là cách
+# đặt dấu có thể lệch đôi chỗ so với cách viết trong sách.
+#
+---
+name: hannomPS.user
+version: "2026.01"
+sort: original
+use_preset_vocabulary: false
+...
+
+主義	chur nghiax	10000
+社會主義	xax hooij chur nghiax	10000
+共和	coongj hoaf	10000
+共和社會主義越南	coongj hoaf xax hooij chur nghiax vieetj namz	10000
+共產	coongj sanr	10000
+獨立	ddoocj laapj	10000
+自由	tuwj doz	10000
+幸福	hanhj phucs	10000
+人民	nhaanz daanz	10000
+國家	quoocs giaz	10000
+政府	chinhs phur	10000
+主席	chur tichj	10000
+文化	vawnz hoas	10000
+教育	giaos ducj	10000
+科學	khoaz hocj	10000
+技術	kyx thuaatj	10000
+經濟	kinhz tees	10000
+社會	xax hooij	10000
+歷史	lichj suwr	10000
+地理	ddiaj lys	10000
+河內	haf nooij	10000
+西貢	taayz coongs	10000
+漢喃	hans noomz	10000
+國語	quoocs nguwx	10000
+字喃	tuwj noomz	10000

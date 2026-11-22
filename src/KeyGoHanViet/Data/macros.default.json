@@ -1,0 +1,32 @@
+[
+  {
+    "key": "chxhcnvn",
+    "values": [ "共和社會主義越南" ],
+    "note": "Cộng hoà Xã hội Chủ nghĩa Việt Nam"
+  },
+  {
+    "key": "vn",
+    "values": [ "越南" ],
+    "note": "Việt Nam"
+  },
+  {
+    "key": "xhcn",
+    "values": [ "社會主義" ],
+    "note": "Xã hội chủ nghĩa"
+  },
+  {
+    "key": "hn",
+    "values": [ "河內", "漢喃" ],
+    "note": "Hà Nội / Hán Nôm"
+  },
+  {
+    "key": "dcsvn",
+    "values": [ "共產黨越南" ],
+    "note": "Đảng Cộng sản Việt Nam"
+  },
+  {
+    "key": "cndv",
+    "values": [ "主義唯物" ],
+    "note": "Chủ nghĩa duy vật"
+  }
+]
