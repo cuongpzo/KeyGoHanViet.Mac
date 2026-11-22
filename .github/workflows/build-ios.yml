@@ -32,11 +32,18 @@ jobs:
 
       - name: Build .app cho iPhone (arm64, không ký)
         run: |
+          set -o pipefail
           dotnet build src/KeyGoHanViet.iOS/KeyGoHanViet.iOS.csproj \
             -c Release -r ios-arm64 \
             -p:EnableCodeSigning=false \
             -p:ValidateXcodeVersion=false \
-            -nologo
+            -nologo -clp:ErrorsOnly 2>&1 | tee build.log || {
+              # Đẩy các dòng lỗi lên thành annotation để xem được ngay ở trang tóm tắt.
+              grep -iE 'error|failed' build.log | sort -u | head -8 | while IFS= read -r line; do
+                echo "::error::${line:0:900}"
+              done
+              exit 1
+            }
 
       - name: Đóng gói thành .ipa
         id: pack

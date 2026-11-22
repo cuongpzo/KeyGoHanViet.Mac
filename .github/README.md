@@ -1,6 +1,12 @@
-# KeyGo Hán Việt cho macOS
+# KeyGo Hán Việt cho macOS và iPhone / iPad
 
-Bộ gõ Hán Việt chạy trên thanh trình đơn macOS (Avalonia, .NET 10).
+Bộ gõ Hán Việt chạy trên thanh trình đơn macOS (Avalonia, .NET 10), kèm bản
+bàn phím tuỳ chỉnh cho iPhone / iPad.
+
+**iPhone / iPad:** xem [HUONG_DAN_IPHONE.md](../HUONG_DAN_IPHONE.md) — tải `.ipa` từ
+workflow **Build iOS**, ký và cài bằng Sideloadly.
+
+## macOS
 
 ## Tải bản build sẵn
 
@@ -30,6 +36,8 @@ Gói chỉ ký tạm (ad-hoc), không qua notarize của Apple, nên bắt buộ
 ## Cấu trúc kho
 
 - `src/KeyGoHanViet.Mac` — ứng dụng macOS
+- `src/KeyGoHanViet.iOS` — app chứa cho iPhone / iPad (hướng dẫn + ô gõ thử)
+- `src/KeyGoHanViet.iOS.Keyboard` — bàn phím tuỳ chỉnh iOS (Keyboard Extension)
 - `src/KeyGoHanViet.Shared` — lõi dùng chung với bản Windows
 - `src/KeyGoHanViet/Data`, `*.ico` — dữ liệu mặc định và icon K/Q dùng chung
 - `hannomPS.*.yaml`, `ChinesePhienAmWords.txt` — từ điển
